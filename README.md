@@ -1,4 +1,4 @@
-# 📈 Time Series Analysis of COVID-19 Daily Deaths in Sri Lanka
+# 📈 Time Series Analysis of COVID-19 Deaths in Sri Lanka
 This project performs time series analysis on daily COVID-19 deaths per million in Sri Lanka using ARIMA models in R. It includes data preprocessing, stationarity testing, model fitting with auto.arima, residual diagnostics, and forecasting.
 
 ## 📂 Project Structure
@@ -16,61 +16,32 @@ This project performs time series analysis on daily COVID-19 deaths per million 
 2. **Transform Data**
 - Convert data into a time series object with daily frequency starting from October 22, 2020.
 
-Stationarity Check
+3. **Stationarity Check**
+- Apply Augmented Dickey-Fuller (ADF) test.
+- Difference the data if necessary to achieve stationarity.
 
-Apply Augmented Dickey-Fuller (ADF) test.
+4. **Model Identification**
 
-Difference the data if necessary to achieve stationarity.
+- Examine ACF and PACF plots.
 
-Model Identification
+- Use auto.arima() to identify the best-fit model based on AICc.
 
-Examine ACF and PACF plots.
+5. **Model Diagnostics**
 
-Use auto.arima() to identify the best-fit model based on AICc.
+-Check residuals for autocorrelation using Ljung-Box test.
 
-Model Diagnostics
+- Review residual plots.
 
-Check residuals for autocorrelation using Ljung-Box test.
+6. **Forecasting**
 
-Review residual plots.
+- Forecast the future deaths for the next 10 periods.
 
-Forecasting
+- Plot forecast with 95% confidence intervals.
 
-Forecast the future daily deaths for the next 10 periods (customizable).
+7. **Model Evaluation**
 
-Plot forecast with 95% confidence intervals.
+- Output forecasted values.
 
-Model Evaluation
+- Compute accuracy metrics.
 
-Output forecasted values.
 
-Compute accuracy metrics.
-
-📦 Requirements
-Ensure the following R packages are installed:
-
-r
-Copy
-Edit
-install.packages(c("forecast", "tseries", "lmtest", "ggplot2", 
-                   "zoo", "xts", "dplyr", "readr", "scales"))
-📁 Data Source
-The dataset (srilanka.csv) should be placed at:
-
-swift
-Copy
-Edit
-C:/Users/ASUS/Desktop/Corona/srilanka.csv
-You can modify the file path in the script to match your local directory.
-
-🧪 Example Forecast Plot
-The script ends with a forecast plot visualizing the predicted number of deaths per million with a 95% confidence interval.
-
-📌 Notes
-Time series frequency is set to 365 (daily).
-
-ADF test is used for checking stationarity.
-
-Model selection is based on KPSS test and AICc.
-
-Only 10 future periods are forecasted — adjust h as needed for longer forecasts.
