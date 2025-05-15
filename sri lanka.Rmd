@@ -1,0 +1,152 @@
+---
+title: "Untitled"
+author: "Nadeesha"
+date: "2/16/2021"
+output: html_document
+---
+```{r}
+remove.packages(rlang_downstream_check)
+```
+
+```{r}
+# Load required libraries
+library(forecast)
+library(tseries)
+library(lmtest)
+library(ggplot2)
+library(zoo)
+library(xts)
+library(dplyr)
+library(readr)
+library(scales)
+```
+
+```{r}
+# Load the dataset
+sldeaths=read.csv("C:/Users/ASUS/Desktop/Corona/srilanka.csv",header = TRUE)
+sldeaths
+```
+
+```{r}
+# Plot the raw data
+plot(sldeaths, col="darkblue", ylab="Daily cases per millions in Sri Lanka ")
+```
+
+```{r}
+# Extract the relevant column
+slddeaths=sldeaths$Srilanka
+```
+
+
+```{r}
+# Convert to time series
+deathsnew=ts(slddeaths, frequency=365, start=c(2020,10,22))
+deathsnew
+```
+
+```{r}
+# Plot the time series
+plot.ts(deathsnew)
+```
+
+```{r}
+# Summary statistics
+summary(deathsnew)
+```
+
+
+```{r}
+# Check frequency
+frequency(deathsnew)
+```
+
+
+```{r}
+# ADF test for stationarity
+adf.test(deathsnew)
+```
+
+```{r}
+# Differencing
+d1=diff(deathsnew, differences = 1)
+```
+
+```{r}
+# ADF test after differencing
+adf.test(d1)
+```
+```{r}
+# Plot the differenced series
+plot(d1)
+```
+
+
+```{r}
+# ACF and PACF
+par(mfrow=c(2,1))
+acf(d1)
+pacf(d1)
+```
+
+```{r}
+# ACF plot
+dacf=acf(d1)
+plot(dacf, main = "ACF Plot")
+```
+
+```{r}
+# PACF plot
+dpacf=pacf(d1)
+plot(dpacf,main = "PACF plot")
+```
+
+```{r}
+# Fit ARIMA model using auto.arima
+model <- auto.arima(d1,trace=TRUE,test="kpss",ic="aicc")
+
+```
+
+
+```{r}
+# Alternative auto.arima result
+auto_arima_test=auto.arima(d1)
+auto_arima_test
+```
+
+```{r}
+# Confidence intervals of the parameters
+confint(model)
+```
+
+```{r}
+# Plot residuals
+plot.ts(model$residuals)
+```
+
+
+```{r}
+# Forecasting next 10 points
+forecast <- forecast(model, level=c(95), h=1*10)
+
+plot(forecast,xlab="Year",ylab = "Number of Deaths in Million")
+```
+
+```{r}
+# Forecast values
+forecast
+```
+
+```{r}
+# Ljung-Box test for residuals
+Box.test(model$resid, lag=5, type="Ljung-Box")
+Box.test(model$resid, lag=10, type="Ljung-Box")
+Box.test(model$resid, lag=15, type="Ljung-Box")
+```
+
+```{r}
+# Accuracy of the model
+accuracy(model)
+```
+
+
+
